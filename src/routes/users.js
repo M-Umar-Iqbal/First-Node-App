@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { sendResponse } = require('../utils/response');
-const { STATUS_CODES } = require('../constants/status-code');
+const { createUserController, fetchAllUsersController, fetchUserByIdController } = require('../controllers/UserController');
 
-router.get('/get-users', (req, res) => {
-    // Example: Fetch users from database
-    const users = []; // Replace with actual data
-    sendResponse(res, users, 'Users fetched successfully', STATUS_CODES.SUCCESS);
-});
+router.get('/fetch-all-users', fetchAllUsersController);
+router.post('/create-user', createUserController);
+router.get('/get-user-by-id/:id', fetchUserByIdController);
 
 module.exports = router;

@@ -1,7 +1,7 @@
-const { sendResponseError } = require('../utils/response');
+const { buildErrorResponse } = require('../utils/response');
 const { STATUS_CODES } = require('../constants/status-code');
 
-const errorHandler = (err, req, res, next) => {
+const errorMiddleware = (err, req, res, next) => {
     const statusCode = res.statusCode && res.statusCode !== 200 ? res.statusCode : err.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR;
     
     // Prepare error details (only in development)
@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
         ...(err.errors && { details: err.errors })
     };
     
-    sendResponseError(res, err.message || 'Internal Server Error', statusCode, errors);
+    buildErrorResponse(res, err.message || 'Internal Server Error', statusCode, errors);
 };
 
-module.exports = { errorHandler };
+module.exports = { errorMiddleware };

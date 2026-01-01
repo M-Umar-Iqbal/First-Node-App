@@ -1,7 +1,8 @@
 const { STATUS_CODES } = require('../constants/status-code');
 
-const sendResponse = (res, data = null, message = 'Success', statusCode = STATUS_CODES.SUCCESS) => {
+const buildSuccessResponse = (res, data = null, message = 'Success', statusCode = STATUS_CODES.SUCCESS) => {
     const response = {
+        statusCode,
         success: true,
         message,
         ...(data && { data })
@@ -9,8 +10,9 @@ const sendResponse = (res, data = null, message = 'Success', statusCode = STATUS
     return res.status(statusCode).json(response);
 };
 
-const sendResponseError = (res, message = 'Internal Server Error', statusCode = STATUS_CODES.INTERNAL_SERVER_ERROR, errors = null) => {
+const buildErrorResponse = (res, message = 'Internal Server Error', statusCode = STATUS_CODES.INTERNAL_SERVER_ERROR, errors = null) => {
     const response = {
+        statusCode,
         success: false,
         message,
         ...(errors && { errors })
@@ -19,7 +21,7 @@ const sendResponseError = (res, message = 'Internal Server Error', statusCode = 
 };
 
 module.exports = {
-    sendResponse,
-    sendResponseError
+    buildSuccessResponse,
+    buildErrorResponse
 };
 
