@@ -1,4 +1,4 @@
-const { sendError } = require('../utils/response');
+const { sendResponseError } = require('../utils/response');
 const { STATUS_CODES } = require('../constants/status-code');
 
 const errorHandler = (err, req, res, next) => {
