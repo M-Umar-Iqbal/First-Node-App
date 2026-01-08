@@ -1,5 +1,5 @@
 const UserModel = require('../models/UserModel');
-const { createUserSchema, fetchUserByIdSchema } = require('../validators/UserValidator');
+const { createUserSchema, fetchUserByIdSchema, deleteUserByIdSchema } = require('../validators/UserValidator');
 const { buildSuccessResponse, buildErrorResponse } = require('../utils/response');
 const { STATUS_CODES } = require('../constants/status-code');
 
@@ -11,9 +11,9 @@ const fetchAllUsersController = async (req, res) => {
 const createUserController = async (req, res) => {
     const { name, email, age, gender, phone, address, city, state, country, zip, hobbies, skills } = req.body;
     // Joi validates the request body against the schema and returns an error if the request body is invalid before further processing
-    const { error } = createUserSchema.validate(req.body);
+    const { error } = createUserSchema.validate(req.body, { abortEarly: false });
     if (error) {
-        return buildErrorResponse(res, error.message, STATUS_CODES.BAD_REQUEST);
+        return buildErrorResponse(res, error.details.map(detail => detail.message).join(', '), STATUS_CODES.BAD_REQUEST);
     }
     // Check if user already exists
     const existingUser = await UserModel.findOne({ email });
@@ -40,5 +40,21 @@ const fetchUserByIdController = async (req, res) => {
     return buildSuccessResponse(res, user, 'User fetched successfully', STATUS_CODES.SUCCESS);
 };
 
+const updateUserController = async (req, res) => {}
 
-module.exports = { fetchAllUsersController, createUserController, fetchUserByIdController };
+const deleteUserController = async (req, res) => {
+    const {id} = req.params;
+
+    const { error } = deleteUserByIdSchema.validate(req.params, { abortEarly: false });
+    if (error) {
+        return buildErrorResponse(res, error.details.map(detail => detail.message).join(', '), STATUS_CODES.BAD_REQUEST);
+    }
+    const user = await UserModel.findByIdAndDelete(id);
+    if (!user) {
+        return buildErrorResponse(res, 'User not found', STATUS_CODES.NOT_FOUND);
+    }
+    return buildSuccessResponse(res, user, 'User deleted successfully', STATUS_CODES.SUCCESS);
+}
+
+
+module.exports = { fetchAllUsersController, createUserController, fetchUserByIdController, updateUserController, deleteUserController };

@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    phone: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     age: {
         type: Number,
         default: 0,
@@ -28,10 +33,6 @@ const userSchema = new mongoose.Schema({
         default: "",
     },
     address: {
-        type: String,
-        default: "",
-    },
-    phone: {
         type: String,
         default: "",
     },
