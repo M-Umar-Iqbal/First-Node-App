@@ -81,12 +81,8 @@ const updateUserSchema = Joi.object({
     isActive: Joi.boolean().optional(),
 });
 
-const fetchUserByIdSchema = Joi.object({
+const userIdSchema = Joi.object({
     id: Joi.string().hex().length(24).required(),
 });
 
-const deleteUserByIdSchema = Joi.object({
-    id: Joi.string().hex().length(24).required(),
-});
-
-module.exports = { createUserSchema, updateUserSchema, fetchUserByIdSchema, deleteUserByIdSchema };
+module.exports = { createUserSchema, updateUserSchema, userIdSchema };
